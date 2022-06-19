@@ -82,7 +82,7 @@ export default function ManageAccount({ navigation }) {
             <Button title="Update Password" onPress={updateUserPassword} style={{marginBottom: 10}}/>
             <Button title="Delete User" onPress={deleteUserAndToDos} style={{marginBottom: 10}}/>
             <Button title="Logout" onPress={logout} style={{marginBottom: 10}}/>
-            <Button title="Back to ToDos" onPress={() => navigation.pop()} style={{marginBottom: 10}}/>
+            <Button title="Back to Notes" onPress={() => navigation.pop()} style={{marginBottom: 10}}/>
           </View>
     </View>
   );

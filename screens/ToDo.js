@@ -1,23 +1,35 @@
-import { View, Button, Text, Modal, SafeAreaView, ActivityIndicator, FlatList, TextInput, Linking,TouchableOpacity} from 'react-native';
-import InlineTextButton from '../components/InlineTextButton';
-import AppStyles from '../styles/AppStyles';
-import { auth, db} from "../firebase";
-import { collection, addDoc, query, where, getDocs, deleteDoc, doc, setDoc} from "firebase/firestore"; 
-import { sendEmailVerification, signOut} from 'firebase/auth';
-import UpdateToDo from './Update';
-import { Header } from 'react-native-elements';
-// import React from 'react';
-// import { useState } from 'react';
-import AddToDoModal from '../components/AddToDoModal';
+import * as Location from 'expo-location';
+
+import { ActivityIndicator, Button, FlatList, Linking, Modal, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
-import {title} from '../components/AddToDoModal';
+import React, { Component, useEffect, useLayoutEffect, useState } from 'react';
+import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc, where } from "firebase/firestore";
+import { auth, db } from "../firebase";
+import { sendEmailVerification, signOut } from 'firebase/auth';
+
+import AddToDoModal from '../components/AddToDoModal';
+import AppStyles from '../styles/AppStyles';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
-// import { Link, NavigationContainer } from '@react-navigation/native';
+import { Header } from 'react-native-elements';
+import InlineTextButton from '../components/InlineTextButton';
+import StickyParallaxHeader from 'react-native-sticky-parallax-header';
+import UpdateToDo from './Update';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import location from '../components/AddToDoModal'
-import * as Location from 'expo-location';
-import React, { Component, useEffect, useState, useLayoutEffect } from 'react';
-import StickyParallaxHeader from 'react-native-sticky-parallax-header';
+import {title} from '../components/AddToDoModal';
+
+// import React from 'react';
+// import { useState } from 'react';
+
+
+
+
+// import { Link, NavigationContainer } from '@react-navigation/native';
+
+
+
+
+
 // import StickyParallaxHeader from 'react-native-sticky-parallax-header'
 
 
@@ -38,6 +50,20 @@ export default function ToDo({ navigation }) {
   //     }
   //   })
   // })
+
+  
+    
+useEffect(()=>{
+  //console.log(" Profile : called anytime a specific state variable changes");
+  navigation.setOptions({
+    headerLeft: () => (
+         <TouchableOpacity onPress={()=> navigation.navigate("Sample")}>
+         <Text  style={{fontWeight: 'bold',color: 'black'}}>More</Text>
+         </TouchableOpacity>
+    )
+  })
+});
+
 
  useEffect(() => {
     (async () => {

@@ -1,4 +1,7 @@
+import * as Analytics from "expo-firebase-analytics";
+
 import { ActivityIndicator, Button, FlatList, Linking, Modal, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, {useRef} from 'react';
 import { auth, db } from "./firebase";
 import { sendEmailVerification, signOut } from 'firebase/auth';
 
@@ -9,6 +12,7 @@ import ManageAccount from './screens/ManageAccount';
 import { MaterialIcons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import ResetPassword from './screens/ResetPassword';
+import Sample from './screens/Sample';
 import Search from './screens/SB';
 import SignUp from './screens/SignUp';
 import ToDo from './screens/ToDo';
@@ -19,6 +23,11 @@ import { useNavigation } from '@react-navigation/native';
 const Stack = createNativeStackNavigator();
 
 export default function App({ navigation}) {
+  const navigationRef = useRef();
+  const routeNameRef = useRef();
+
+  const Stack = createNativeStackNavigator();
+
   // const navigation = useNavigation();
   let signOutUser = () => {
     alert("hii");
@@ -31,7 +40,22 @@ export default function App({ navigation}) {
     }
 }
   return (
-    <NavigationContainer>
+    <NavigationContainer       ref={navigationRef}
+    onReady={() =>
+      (routeNameRef.current = navigationRef.current.getCurrentRoute().name)
+    }
+    onStateChange={ async () => {
+      const previousRouteName = routeNameRef.current;
+      const currentRouteName = navigationRef.current.getCurrentRoute().name;
+      if (previousRouteName !== currentRouteName) {
+        await Analytics.logEvent("screen_view", {
+          screen_name: currentRouteName,
+          screen_class: currentRouteName,
+        });
+      }
+      // Save the current route name for later comparison
+      routeNameRef.current = currentRouteName;
+    }}>
       <Stack.Navigator>
         <Stack.Screen
           name="Login"
@@ -70,6 +94,18 @@ export default function App({ navigation}) {
           name="Search"
           component={Search}
           options={{headerShown: false}} />
+           <Stack.Screen
+          name="Sample"
+          component={Sample} 
+          options={({navigation}) => ({
+            title: 'Notes App',
+            headerLeft: () => (
+              <View style={{flexDirection:"row"}}>
+              <MaterialIcons name="arrow-back" size={24} color="black" style={{marginLeft: 20}} onPress={()=> {navigation.navigate('ToDo')}}/> 
+              </View>
+            )
+          })}
+          />
         
       </Stack.Navigator>
     </NavigationContainer>
